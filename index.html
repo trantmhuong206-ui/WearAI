@@ -1744,8 +1744,200 @@ function renderAdminPage(content) {
     return;
   }
 
-  if (currentPage === "reports") {
-    content.innerHTML = pageHeader("Thống kê và báo cáo",
+
+if (currentPage === "reports") {
+  const partners = readStorage("wearai_affiliate_partners", [
+    {
+      name: "UNIQLO",
+      product: "Áo thun basic",
+      link: "https://www.uniqlo.com/",
+      rate: 8,
+      clicks: 1250,
+      orders: 45,
+      revenue: 9000000
+    },
+    {
+      name: "Canifa",
+      product: "Áo sơ mi thanh lịch",
+      link: "https://canifa.com/",
+      rate: 10,
+      clicks: 980,
+      orders: 32,
+      revenue: 6400000
+    }
+  ]);
+
+  const money = value =>
+    Number(value || 0).toLocaleString("vi-VN") + " ₫";
+
+  const totalRevenue = partners.reduce(
+    (sum, item) => sum + Number(item.revenue || 0), 0
+  );
+
+  const totalCommission = partners.reduce(
+    (sum, item) =>
+      sum + Number(item.revenue || 0) * Number(item.rate || 0) / 100,
+    0
+  );
+
+  const totalClicks = partners.reduce(
+    (sum, item) => sum + Number(item.clicks || 0), 0
+  );
+
+  const totalOrders = partners.reduce(
+    (sum, item) => sum + Number(item.orders || 0), 0
+  );
+
+  const paidCommission = readStorage(
+    "wearai_affiliate_paid_commission", 0
+  );
+
+  const pendingCommission = Math.max(
+    0, totalCommission - Number(paidCommission || 0)
+  );
+
+  content.innerHTML = pageHeader(
+    "Thống kê và báo cáo",
+    "Theo dõi doanh thu, hoa hồng và hiệu quả hợp tác tiếp thị liên kết."
+  ) + `
+    <div class="stats">
+      ${statCard("₫", money(totalRevenue), "Tổng doanh thu từ đối tác")}
+      ${statCard("♧", money(totalCommission), "Tổng hoa hồng dự kiến")}
+      ${statCard("◷", money(pendingCommission), "Hoa hồng chờ thanh toán")}
+      ${statCard("✓", money(paidCommission), "Hoa hồng đã thanh toán")}
+    </div>
+
+    <div class="stats">
+      ${statCard("↗", totalClicks.toLocaleString("vi-VN"), "Lượt nhấp liên kết")}
+      ${statCard("▣", totalOrders.toLocaleString("vi-VN"), "Đơn hàng ghi nhận")}
+      ${statCard(
+        "%",
+        totalClicks
+          ? (totalOrders / totalClicks * 100).toFixed(2) + "%"
+          : "0%",
+        "Tỷ lệ chuyển đổi"
+      )}
+      ${statCard("♙", partners.length, "Đối tác affiliate")}
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">Hiệu quả đối tác affiliate</h2>
+      <p class="section-description">
+        Theo dõi sản phẩm, đường dẫn tiếp thị, lượt nhấp, đơn hàng
+        và hoa hồng của từng đối tác.
+      </p>
+
+      <div class="panel">
+        <div class="section-header">
+          <strong>Danh sách đối tác</strong>
+          <button class="btn" onclick="exportAffiliateReport()">
+            Tải báo cáo CSV
+          </button>
+        </div>
+
+        <div style="overflow-x:auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Đối tác</th>
+                <th>Sản phẩm</th>
+                <th>Link affiliate</th>
+                <th>Tỷ lệ hoa hồng</th>
+                <th>Lượt nhấp</th>
+                <th>Đơn hàng</th>
+                <th>Doanh thu</th>
+                <th>Hoa hồng</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${partners.map((item, index) => `
+                <tr>
+                  <td><strong>${escapeHTML(item.name)}</strong></td>
+                  <td>${escapeHTML(item.product)}</td>
+                  <td>
+                    <a href="${escapeHTML(item.link)}"
+                       target="_blank" rel="noopener noreferrer">
+                      Xem liên kết ↗
+                    </a>
+                  </td>
+                  <td>${Number(item.rate)}%</td>
+                  <td>${Number(item.clicks).toLocaleString("vi-VN")}</td>
+                  <td>${Number(item.orders).toLocaleString("vi-VN")}</td>
+                  <td>${money(item.revenue)}</td>
+                  <td>
+                    <strong>${money(
+                      Number(item.revenue) * Number(item.rate) / 100
+                    )}</strong>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Quản lý thanh toán hoa hồng</h2>
+      <p class="section-description">
+        Cập nhật số hoa hồng đã thanh toán để theo dõi số tiền còn chờ xử lý.
+      </p>
+
+      <div class="panel">
+        <div class="field">
+          <label for="paidCommissionInput">Tổng hoa hồng đã thanh toán (VNĐ)</label>
+          <input id="paidCommissionInput"
+                 type="number"
+                 min="0"
+                 value="${Number(paidCommission)}">
+        </div>
+        <button class="btn btn-primary" onclick="savePaidCommission()">
+          Lưu thông tin thanh toán
+        </button>
+        <p class="muted">
+          Chức năng này chỉ cập nhật báo cáo trên trình duyệt,
+          không thực hiện chuyển tiền ngân hàng.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Bộ lọc báo cáo</h2>
+      <p class="section-description">
+        Chọn khoảng thời gian để xuất báo cáo đối tác.
+      </p>
+
+      <div class="panel">
+        <div class="field">
+          <label for="reportStart">Từ ngày</label>
+          <input type="date" id="reportStart">
+        </div>
+        <div class="field">
+          <label for="reportEnd">Đến ngày</label>
+          <input type="date" id="reportEnd">
+        </div>
+        <button class="btn btn-primary" onclick="exportAffiliateReport()">
+          Xuất báo cáo đối tác
+        </button>
+        <p class="muted">
+          Dữ liệu mẫu hiện chưa có ngày phát sinh riêng cho từng đơn hàng,
+          vì vậy bộ lọc ngày chưa thể lọc giao dịch thực tế.
+        </p>
+      </div>
+    </section>
+
+    <div class="notice">
+      <div>
+        <strong>Lưu ý về dữ liệu</strong><br>
+        Các số liệu đang là dữ liệu minh họa để trình diễn giao diện.
+        Doanh thu và hoa hồng thực tế cần được đồng bộ từ hệ thống đơn hàng
+        và chương trình affiliate của từng đối tác.
+      </div>
+    </div>
+  `;
+  return;
+}
+   content.innerHTML = pageHeader("Thống kê và báo cáo",
       "Các nhóm chỉ số cần kết nối dữ liệu thực tế.") +
       `<div class="panel">
         <table class="table">
