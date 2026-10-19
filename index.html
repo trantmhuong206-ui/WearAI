@@ -3,1390 +3,551 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WearAI — Tủ đồ thông minh</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WearAI - Tủ đồ thông minh</title>
 <style>
-:root {
-  --green:#45634d;
-  --pale:#e6eee2;
-  --bg:#f7f7f1;
-  --paper:#fffefa;
-  --ink:#253329;
-  --muted:#758075;
-  --line:#e2e7de;
-  --red:#a94f48;
-}
-* {box-sizing:border-box}
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:Inter,Arial,sans-serif;
-}
-button,input,select,textarea {font:inherit}
-button {cursor:pointer}
-.hidden {display:none!important}
-.btn {
-  border:0;
-  background:var(--green);
-  color:white;
-  padding:11px 15px;
-  border-radius:10px;
-  font-weight:700;
-  font-size:13px;
-}
-.btn.light {
-  background:white;
-  border:1px solid var(--line);
-  color:var(--green);
-}
-.btn.danger {background:#fff0ee;color:var(--red)}
-.muted {color:var(--muted);font-size:12px;line-height:1.7}
-
-.login-screen {
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:linear-gradient(135deg,#e8efe3,#f8f7f1);
-  display:grid;
-  place-items:center;
-  padding:20px;
-  overflow:auto;
-}
-.login-card {
-  width:min(440px,100%);
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:30px;
-  box-shadow:0 20px 70px #233a2812;
-}
-.brand {
-  font-size:25px;
-  font-weight:850;
-  color:var(--green);
-  letter-spacing:-1px;
-}
-.brand span {color:#9db79a}
-.login-card h1 {font-size:27px;margin:22px 0 8px}
-.field {display:grid;gap:6px;margin:13px 0}
-.field label {font-size:12px;font-weight:700}
-.field input,.field select,.field textarea {
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:white;
-  padding:12px;
-  color:var(--ink);
-}
-.login-card .btn {width:100%;margin-top:8px}
-.demo-box {
-  background:#f1f4ed;
-  padding:13px;
-  border-radius:12px;
-  margin-top:16px;
-  font-size:12px;
-  line-height:1.9;
-}
-.error {color:var(--red);font-size:12px;line-height:1.6}
-
-.app {
-  display:grid;
-  grid-template-columns:235px minmax(0,1fr);
-  min-height:100vh;
-}
-.sidebar {
-  background:#edf1e9;
-  border-right:1px solid var(--line);
-  padding:22px 14px;
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow:auto;
-}
-.brandline {padding:0 10px}
-.brandline small {
-  display:block;
-  font-size:9px;
-  color:var(--muted);
-  letter-spacing:1.5px;
-  margin-top:3px;
-}
-.nav-label {
-  font-size:10px;
-  letter-spacing:1.5px;
-  color:#849087;
-  font-weight:800;
-  padding:0 10px;
-  margin-bottom:7px;
-}
-.nav {display:grid;gap:4px}
-.nav button {
-  border:0;
-  background:transparent;
-  text-align:left;
-  padding:11px;
-  border-radius:10px;
-  color:#566359;
-  font-size:13px;
-  font-weight:650;
-}
-.nav button.active,.nav button:hover {
-  background:white;
-  color:var(--green);
-}
-.sidebar-bottom {
-  margin-top:auto;
-  border:1px solid var(--line);
-  background:var(--paper);
-  border-radius:14px;
-  padding:13px;
-}
-.user-info {font-size:12px;line-height:1.8}
-.main {padding:27px clamp(16px,3vw,40px) 50px;min-width:0}
-.topbar {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:25px;
-}
-.eyebrow {
-  font-size:10px;
-  color:var(--green);
-  font-weight:800;
-  letter-spacing:1.7px;
-}
-.page-title {
-  font-size:clamp(25px,3vw,36px);
-  margin:6px 0 0;
-  letter-spacing:-1px;
-}
-.top-actions {display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.avatar {
-  width:38px;height:38px;border-radius:50%;
-  display:grid;place-items:center;
-  background:var(--pale);color:var(--green);font-weight:800;
-}
-.page {display:none}
-.page.active {display:block}
-.hero {
-  background:#e1eadc;
-  border-radius:22px;
-  padding:30px;
-}
-.hero h2 {
-  font-size:clamp(30px,4vw,46px);
-  line-height:1.08;
-  margin:10px 0;
-}
-.hero p {font-size:13px;line-height:1.8;color:#5f6f61;max-width:600px}
-.section-head {
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:12px;
-  margin:27px 0 14px;
-}
-.section-head h3 {font-size:19px;margin:0}
-.section-head p {font-size:12px;color:var(--muted);margin:5px 0 0}
-.stats {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-  margin-top:15px;
-}
-.stat,.card {
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:17px;
-  min-width:0;
-}
-.stat strong {display:block;font-size:23px;margin:10px 0 3px;overflow-wrap:anywhere}
-.stat span {font-size:11px;color:var(--muted)}
-.grid2 {display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.toolbar {display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
-.toolbar input,.toolbar select {
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:10px;
-  background:white;
-  min-width:0;
-}
-.wardrobe-grid,.product-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:14px;
-}
-.item-card,.product-card {
-  background:white;
-  border:1px solid var(--line);
-  border-radius:15px;
-  overflow:hidden;
-  min-width:0;
-}
-.item-photo,.product-photo {
-  width:100%;height:190px;object-fit:cover;
-  background:#edf0e7;display:block;
-}
-.item-body,.product-body {padding:13px}
-.item-body h4,.product-body h4 {margin:0 0 6px;font-size:14px}
-.item-body p,.product-body p {
-  font-size:11px;color:var(--muted);line-height:1.6;
-  overflow-wrap:anywhere;
-}
-.actions {display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
-.actions .btn {font-size:11px;padding:8px 10px}
-.notice {
-  background:#edf3e9;color:#4f6651;
-  border-radius:11px;padding:12px;
-  font-size:12px;line-height:1.7;margin-bottom:13px;
-}
-.notice.warn {background:#fff2df;color:#846534}
-.table-wrap {
-  overflow:auto;border:1px solid var(--line);
-  border-radius:13px;background:white;
-}
-table {width:100%;border-collapse:collapse;min-width:600px;font-size:12px}
-th,td {text-align:left;padding:12px;border-bottom:1px solid var(--line)}
-th {
-  font-size:10px;text-transform:uppercase;
-  letter-spacing:.7px;background:#f0f3ec;color:#6e796f;
-}
-tr:last-child td {border-bottom:0}
-.pill {
-  display:inline-block;border-radius:30px;padding:5px 8px;
-  background:#e4eee1;color:#45634d;font-size:10px;font-weight:800;
-}
-.pill.pending {background:#fff1d9;color:#8a6729}
-.field textarea {min-height:100px;resize:vertical}
-.empty {
-  grid-column:1/-1;text-align:center;padding:30px;
-  border:1px dashed #cdd7cb;border-radius:13px;
-  color:var(--muted);font-size:12px;
-}
-.footer {text-align:center;color:var(--muted);font-size:11px;padding:25px 0}
-.admin-only {display:none}
-.is-admin .admin-only {display:block}
-.toast {
-  position:fixed;right:20px;bottom:20px;
-  background:#24372a;color:white;
-  padding:13px 16px;border-radius:12px;
-  z-index:200;font-size:12px;max-width:calc(100% - 40px);
-}
-@media(max-width:850px) {
-  .app {grid-template-columns:1fr}
-  .sidebar {height:auto;position:relative;padding:12px;gap:12px}
-  .nav {display:flex;overflow-x:auto}
-  .nav button {white-space:nowrap}
-  .sidebar-bottom {display:none}
-  .stats {grid-template-columns:repeat(2,minmax(0,1fr))}
-  .wardrobe-grid,.product-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
-  .main {padding-top:18px}
-}
-@media(max-width:520px) {
-  .grid2,.wardrobe-grid,.product-grid {grid-template-columns:1fr}
-  .topbar {align-items:flex-start;flex-direction:column}
-  .item-photo,.product-photo {height:230px}
-  .hero {padding:22px}
-}
+:root{--g:#45634d;--p:#e6eee2;--bg:#f7f7f1;--white:#fffefa;--ink:#253329;--muted:#758075;--line:#e2e7de;--red:#a94f48}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+button,.btn{border:0;border-radius:9px;padding:10px 13px;background:var(--g);color:white;font-weight:600}
+.light{background:white;color:var(--g);border:1px solid var(--line)}
+.danger{background:#fff0ee;color:var(--red)}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink)}
+label{font-size:12px;font-weight:bold}
+.field{display:grid;gap:6px;margin:12px 0}
+.muted{color:var(--muted);font-size:12px;line-height:1.7}
+.app{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#edf1e9;padding:20px 13px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-size:26px;font-weight:900;color:var(--g);padding:8px}
+.brand span{color:#91ae8b}
+.nav-title{font-size:10px;color:var(--muted);font-weight:bold;letter-spacing:1px;margin:22px 8px 8px}
+.nav{display:grid;gap:4px}
+.nav button{text-align:left;background:transparent;color:#536254;font-size:12px}
+.nav button.active,.nav button:hover{background:white;color:var(--g)}
+.main{padding:25px;min-width:0}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+h1{font-size:27px;margin:5px 0}
+h2{font-size:23px}
+h3{font-size:18px}
+.page{display:none}
+.page.active{display:block}
+.card,.stat{background:var(--white);border:1px solid var(--line);border-radius:15px;padding:17px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:15px 0}
+.stat strong{display:block;font-size:24px;margin:10px 0}
+.stat span{font-size:11px;color:var(--muted)}
+.toolbar{display:flex;gap:9px;margin:15px 0;flex-wrap:wrap}
+.toolbar>*{flex:1;min-width:150px}
+.item{background:white;border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.photo{width:100%;height:180px;object-fit:cover;background:var(--p)}
+.item-body{padding:13px}
+.item-body h3{font-size:14px;margin:0 0 8px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.actions button{font-size:11px;padding:8px}
+.weather{background:linear-gradient(130deg,#e0eadb,#f7f4e8);border-radius:18px;padding:20px;margin-bottom:16px}
+.weather-temp{font-size:37px;font-weight:bold;color:var(--g)}
+.weather-line{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.notice{background:#edf3e9;padding:12px;border-radius:10px;font-size:12px;line-height:1.7;margin:12px 0}
+.table-wrap{overflow:auto;background:white;border:1px solid var(--line);border-radius:12px;margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:650px;font-size:12px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line)}
+th{background:#eff3eb;color:#617061}
+tr:last-child td{border-bottom:0}
+.badge{background:var(--p);color:var(--g);padding:5px 8px;border-radius:20px;font-size:10px}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+.login-screen{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:15px;background:linear-gradient(130deg,#e6eee2,#f8f7f1);overflow:auto}
+.login-card{width:min(430px,100%);background:white;border:1px solid var(--line);border-radius:20px;padding:25px}
+#toast{position:fixed;bottom:20px;right:20px;background:#253329;color:white;padding:13px 17px;border-radius:10px;z-index:99;max-width:90vw}
+textarea{min-height:85px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:static;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.main{padding:14px}.grid,.grid2{grid-template-columns:1fr}.photo{height:230px}.brand{font-size:22px}}
 </style>
 </head>
-
 <body>
 
-<!-- MÀN HÌNH ĐĂNG NHẬP -->
-<div id="loginScreen" class="login-screen">
-  <form class="login-card" id="loginForm">
-    <div class="brand">Wear<span>AI</span> ✦</div>
-    <h1>Chào mừng bạn trở lại</h1>
-    <p class="muted">Đăng nhập để khám phá tủ đồ số và phong cách của bạn.</p>
-
-    <div class="field">
-      <label for="loginEmail">Email</label>
-      <input id="loginEmail" type="email" autocomplete="username"
-        placeholder="ban@example.com" required>
-    </div>
-
-    <div class="field">
-      <label for="loginPassword">Mật khẩu</label>
-      <input id="loginPassword" type="password"
-        autocomplete="current-password" placeholder="Nhập mật khẩu" required>
-    </div>
-
-    <button class="btn" type="submit">Đăng nhập</button>
-    <p id="loginError" class="error" role="alert" hidden></p>
-
-    <button class="btn light" type="button" id="fillAdminLogin">
-      Điền tài khoản quản trị
-    </button>
-    <button class="btn light" type="button" id="fillUserLogin">
-      Điền tài khoản người dùng
-    </button>
-
-    <div class="demo-box">
-      <b>Tài khoản trình diễn</b><br>
-      Quản trị viên: admin@wearai.demo / Admin123!<br>
-      Người dùng: linh@wearai.demo / User123!
-    </div>
-
-    <p class="muted">
-      Đây là bản demo front-end. Dữ liệu đăng nhập được kiểm tra bằng JavaScript
-      trong trình duyệt, chưa phù hợp để bảo vệ dữ liệu thật.
-    </p>
-  </form>
+<div id="login" class="login-screen">
+ <form class="login-card" id="loginForm">
+  <div class="brand">Wear<span>AI</span> ✦</div>
+  <h2>Chào mừng bạn</h2>
+  <p class="muted">Quản lý tủ đồ và khám phá phong cách cá nhân.</p>
+  <div class="field"><label>Email</label><input id="email" type="email" required placeholder="ban@example.com"></div>
+  <div class="field"><label>Mật khẩu</label><input id="password" type="password" required minlength="6" placeholder="Nhập mật khẩu"></div>
+  <button style="width:100%" type="submit">Đăng nhập</button>
+  <button class="light" style="width:100%;margin-top:8px" type="button" id="showRegister">Tạo tài khoản mới</button>
+  <p id="authMessage" class="muted"></p>
+  <div class="notice">
+   <b>Tài khoản demo</b><br>
+   Admin: admin@wearai.demo / Admin123!<br>
+   Người dùng: linh@wearai.demo / User123!
+  </div>
+  <p class="muted">Bản demo lưu dữ liệu trên trình duyệt. Không dùng mật khẩu thật.</p>
+ </form>
 </div>
 
-<!-- ỨNG DỤNG -->
-<div class="app hidden" id="app">
+<div id="app" class="app hidden">
+ <aside class="sidebar">
+  <div class="brand">Wear<span>AI</span> ✦</div>
+  <div class="nav-title">CÁ NHÂN</div>
+  <nav class="nav" id="userNav">
+   <button data-page="home">⌂ Tổng quan & thời tiết</button>
+   <button data-page="wardrobe">♧ Tủ đồ cá nhân</button>
+   <button data-page="outfits">✧ Bộ phối đồ</button>
+   <button data-page="missing">◇ Đồ còn thiếu</button>
+   <button data-page="feedback">♡ Đánh giá & phản hồi</button>
+   <button data-page="profile">♙ Hồ sơ cá nhân</button>
+  </nav>
+  <div id="adminMenu" class="hidden">
+   <div class="nav-title">QUẢN TRỊ HỆ THỐNG</div>
+   <nav class="nav" id="adminNav">
+    <button data-page="users">Quản lý người dùng</button>
+    <button data-page="adminWardrobe">Quản lý tủ đồ</button>
+    <button data-page="trends">Xu hướng thời trang</button>
+    <button data-page="rules">Quy tắc phối đồ</button>
+    <button data-page="criteria">Tiêu chí đồ còn thiếu</button>
+    <button data-page="products">Sản phẩm & Affiliate</button>
+    <button data-page="reports">Hiệu quả gợi ý</button>
+    <button data-page="moderation">Quản lý phản hồi</button>
+    <button data-page="settings">Cấu hình hệ thống</button>
+    <button data-page="logs">Nhật ký hoạt động</button>
+   </nav>
+  </div>
+  <div class="card" style="margin-top:20px">
+   <b id="sideName">Người dùng</b>
+   <p class="muted" id="sideRole"></p>
+   <button class="light" id="logout" style="width:100%">Đăng xuất</button>
+  </div>
+ </aside>
 
-  <aside class="sidebar">
-    <div class="brandline">
-      <div class="brand">Wear<span>AI</span> ✦</div>
-      <small>SMART WARDROBE</small>
+ <main class="main">
+  <header class="topbar">
+   <div><div class="muted">YOUR PERSONAL STYLE</div><h1 id="pageTitle">Tổng quan</h1></div>
+   <div><span id="roleBadge" class="badge"></span> <button class="light" id="logout2">Thoát</button></div>
+  </header>
+
+  <section id="page-home" class="page">
+   <div class="weather">
+    <div class="weather-line">
+     <div><div class="muted">THỜI TIẾT HIỆN TẠI</div><h2 id="weatherCity">Đang tải thời tiết...</h2><div id="weatherText" class="muted">Đang lấy dữ liệu thời tiết.</div></div>
+     <div class="weather-temp" id="weatherTemp">--°C</div>
     </div>
-
-    <div>
-      <div class="nav-label">KHÔNG GIAN CỦA BẠN</div>
-      <nav class="nav">
-        <button data-page="home">⌂ Tổng quan</button>
-        <button data-page="wardrobe">♧ Tủ đồ của tôi</button>
-        <button data-page="stylist">✧ Phối đồ thông minh</button>
-        <button data-page="products">◇ Sản phẩm thời trang</button>
-        <button data-page="profile">♙ Hồ sơ cá nhân</button>
-      </nav>
+    <div class="grid2" style="margin-top:14px">
+     <div><b>Độ ẩm</b><p id="humidity" class="muted">--</p></div>
+     <div><b>Gợi ý trang phục</b><p id="weatherAdvice" class="muted">Đang phân tích...</p></div>
     </div>
+    <button class="light" id="refreshWeather">Cập nhật thời tiết</button>
+    <p class="muted">Dữ liệu từ Open-Meteo. Cho phép vị trí để xem thời tiết tại nơi bạn đang ở; nếu từ chối, hệ thống dùng Hà Nội.</p>
+   </div>
+   <div class="stats">
+    <div class="stat">♧<strong id="clothesCount">0</strong><span>Món đồ</span></div>
+    <div class="stat">♡<strong id="favCount">0</strong><span>Yêu thích</span></div>
+    <div class="stat">✧<strong id="outfitCount">0</strong><span>Bộ phối đã lưu</span></div>
+    <div class="stat">◇<strong id="feedbackCount">0</strong><span>Đánh giá đã gửi</span></div>
+   </div>
+   <div class="card"><h2>Chào mừng đến với WearAI</h2><p class="muted">Quản lý trang phục, phối đồ theo dịp sử dụng và khám phá những món đồ phù hợp với phong cách của bạn.</p><button data-go="wardrobe">Mở tủ đồ</button> <button data-go="outfits" class="light">Phối đồ</button></div>
+  </section>
 
-    <div class="admin-only">
-      <div class="nav-label">QUẢN TRỊ HỆ THỐNG</div>
-      <nav class="nav">
-        <button data-page="adminUsers">♙ Quản lý người dùng</button>
-        <button data-page="adminWardrobe">♧ Quản lý tủ đồ</button>
-        <button data-page="adminProducts">◇ Quản lý sản phẩm</button>
-        <button data-page="adminContent">▤ Quản lý nội dung</button>
-        <button data-page="adminReports">↗ Thống kê & báo cáo</button>
-        <button data-page="adminSystem">⚙ Hoạt động hệ thống</button>
-      </nav>
+  <section id="page-wardrobe" class="page">
+   <div class="topbar"><h2>Tủ đồ của tôi</h2><button id="addClothing">+ Thêm trang phục</button></div>
+   <div class="toolbar"><input id="searchClothes" placeholder="Tìm theo tên, màu..."><select id="filterCategory"><option value="">Tất cả danh mục</option><option>Áo</option><option>Quần</option><option>Váy</option><option>Giày</option><option>Phụ kiện</option></select><select id="filterColor"><option value="">Tất cả màu sắc</option><option>Trắng</option><option>Đen</option><option>Be</option><option>Xanh</option><option>Đỏ</option></select></div>
+   <div class="grid" id="clothesGrid"></div>
+  </section>
+
+  <section id="page-outfits" class="page">
+   <div class="card"><h2>Phối đồ thông minh</h2>
+    <div class="grid2">
+     <div class="field"><label>Phong cách</label><select id="style"><option>Tối giản</option><option>Năng động</option><option>Thanh lịch</option><option>Cá tính</option><option>Thoải mái</option></select></div>
+     <div class="field"><label>Dịp sử dụng</label><select id="occasion"><option>Hằng ngày</option><option>Đi học</option><option>Đi làm</option><option>Hẹn hò</option><option>Dự tiệc</option><option>Du lịch</option></select></div>
     </div>
+    <button id="generate">Tạo bộ phối đồ</button>
+    <p class="muted">Gợi ý dùng quy tắc demo và dữ liệu trong tủ đồ, không phải AI tạo sinh.</p>
+   </div>
+   <div id="outfitPreview" class="card" style="margin-top:14px">Chọn phong cách rồi tạo gợi ý.</div>
+   <h2>Bộ phối đã lưu</h2><div id="outfitsGrid" class="grid"></div>
+  </section>
 
-    <div class="sidebar-bottom">
-      <div class="user-info">
-        <b id="sideUserName">Người dùng</b><br>
-        <span id="sideUserRole" class="muted">Tài khoản WearAI</span><br>
-        <span id="roleBadge" class="pill">NGƯỜI DÙNG</span>
-      </div>
-      <button class="btn light" style="width:100%;margin-top:12px"
-        id="logoutBtn">Đăng xuất</button>
+  <section id="page-missing" class="page">
+   <div class="card"><h2>Danh sách món đồ còn thiếu</h2><p class="muted">Hệ thống kiểm tra các danh mục cơ bản trong tủ đồ của bạn. Đây là tiêu chí demo có thể điều chỉnh bởi quản trị viên.</p><button id="checkMissing">Kiểm tra tủ đồ</button><div id="missingList" class="notice">Nhấn kiểm tra để xem kết quả.</div></div>
+  </section>
+
+  <section id="page-feedback" class="page">
+   <form id="feedbackForm" class="card"><h2>Đánh giá gợi ý phối đồ</h2>
+    <div class="field"><label>Bộ phối đồ</label><select id="feedbackOutfit"></select></div>
+    <div class="field"><label>Điểm đánh giá</label><select id="rating"><option value="5">5 - Rất tốt</option><option value="4">4 - Tốt</option><option value="3">3 - Bình thường</option><option value="2">2 - Chưa phù hợp</option><option value="1">1 - Không hài lòng</option></select></div>
+    <div class="field"><label>Ý kiến của bạn</label><textarea id="feedbackText" required placeholder="Chia sẻ cảm nhận hoặc đề xuất cải thiện..."></textarea></div>
+    <button>Gửi đánh giá</button>
+   </form>
+   <h2>Phản hồi của tôi</h2><div id="myFeedback"></div>
+  </section>
+
+  <section id="page-profile" class="page">
+   <form id="profileForm" class="card"><h2>Hồ sơ cá nhân</h2>
+    <div class="grid2">
+     <div class="field"><label>Họ và tên</label><input id="pName" required></div>
+     <div class="field"><label>Tuổi</label><input id="pAge" type="number" min="1" max="120"></div>
+     <div class="field"><label>Email</label><input id="pEmail" disabled></div>
+     <div class="field"><label>Thành phố</label><input id="pCity"></div>
+     <div class="field"><label>Chiều cao (cm)</label><input id="pHeight" type="number"></div>
+     <div class="field"><label>Dáng trang phục</label><select id="pFit"><option>Thoải mái</option><option>Vừa vặn</option><option>Oversize</option></select></div>
+     <div class="field"><label>Màu sắc yêu thích</label><input id="pColors"></div>
+     <div class="field"><label>Phong cách yêu thích</label><input id="pStyle"></div>
     </div>
-  </aside>
+    <div class="field"><label>Ghi chú</label><textarea id="pNotes"></textarea></div><button>Lưu hồ sơ</button>
+   </form>
+  </section>
 
-  <main class="main">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">YOUR PERSONAL STYLE</div>
-        <h1 class="page-title" id="pageTitle">Chào bạn, hôm nay mặc gì?</h1>
-      </div>
-      <div class="top-actions">
-        <div class="avatar" id="topAvatar">W</div>
-        <button class="btn light" id="topLogout">Đăng xuất</button>
-      </div>
-    </header>
+  <section id="page-users" class="page admin-page">
+   <div class="topbar"><h2>Quản lý người dùng</h2><button id="addUser">+ Thêm người dùng</button></div>
+   <div class="toolbar"><input id="userSearch" placeholder="Tìm tên hoặc email"></div><div id="usersTable"></div>
+  </section>
 
-    <!-- TỔNG QUAN -->
-    <section class="page" id="page-home">
-      <div class="hero">
-        <div class="eyebrow">MẶC ĐẸP THEO CÁCH CỦA BẠN</div>
-        <h2 id="heroTitle">Ít băn khoăn hơn.<br>Thêm tự tin mỗi ngày.</h2>
-        <p id="heroDescription">
-          Quản lý trang phục, xây dựng phong cách và khám phá những cách phối đồ
-          phù hợp với lịch trình của bạn cùng WearAI.
-        </p>
-        <button class="btn" data-go="stylist">Khám phá phong cách →</button>
-      </div>
+  <section id="page-adminWardrobe" class="page admin-page">
+   <h2>Quản lý dữ liệu tủ đồ</h2><p class="muted">Quản trị viên xem, lọc và xóa dữ liệu trang phục mẫu.</p>
+   <div class="toolbar"><input id="adminClothesSearch" placeholder="Tìm món đồ"></div><div id="adminClothesTable"></div>
+  </section>
 
-      <div class="stats">
-        <div class="stat">♧<strong id="statClothes">0</strong><span>Món đồ trong tủ</span></div>
-        <div class="stat">♡<strong id="statFavorites">0</strong><span>Món yêu thích</span></div>
-        <div class="stat">◇<strong id="statProducts">0</strong><span>Sản phẩm tham khảo</span></div>
-        <div class="stat">✦<strong>∞</strong><span>Khám phá phong cách</span></div>
-      </div>
+  <section id="page-trends" class="page admin-page">
+   <h2>Quản lý xu hướng thời trang</h2>
+   <form id="trendForm" class="card"><div class="field"><label>Tên xu hướng</label><input id="trendName" required></div><div class="field"><label>Mô tả</label><textarea id="trendDesc"></textarea></div><button>Thêm xu hướng</button></form><div id="trendsList" class="grid" style="margin-top:14px"></div>
+  </section>
 
-      <div class="section-head">
-        <div><h3>Tủ đồ nổi bật</h3><p>Một vài món đồ của bạn</p></div>
-        <button class="btn light" data-go="wardrobe">Xem toàn bộ</button>
-      </div>
-      <div class="wardrobe-grid" id="homeWardrobe"></div>
-    </section>
+  <section id="page-rules" class="page admin-page">
+   <h2>Quản lý quy tắc phối đồ</h2>
+   <form id="ruleForm" class="card"><div class="field"><label>Tên quy tắc</label><input id="ruleName" required></div><div class="field"><label>Mô tả</label><textarea id="ruleDesc"></textarea></div><button>Lưu quy tắc</button></form><div id="rulesList"></div>
+  </section>
 
-    <!-- TỦ ĐỒ -->
-    <section class="page" id="page-wardrobe">
-      <div class="section-head">
-        <div><h3>Tủ đồ của tôi</h3><p>Lưu trữ và quản lý trang phục cá nhân.</p></div>
-        <button class="btn" id="addClothing">＋ Thêm trang phục</button>
-      </div>
-      <div class="toolbar">
-        <input id="wardrobeSearch" placeholder="Tìm trang phục...">
-        <select id="wardrobeCategory">
-          <option value="all">Tất cả danh mục</option>
-          <option>Áo</option><option>Quần</option><option>Váy</option>
-          <option>Giày</option><option>Phụ kiện</option>
-        </select>
-      </div>
-      <div class="wardrobe-grid" id="wardrobeGrid"></div>
-    </section>
+  <section id="page-criteria" class="page admin-page">
+   <h2>Tiêu chí xác định đồ còn thiếu</h2>
+   <div class="card"><p class="muted">Bật các danh mục nên có trong tủ đồ cơ bản.</p><div id="criteriaList"></div><button id="saveCriteria">Lưu tiêu chí</button></div>
+  </section>
 
-    <!-- PHỐI ĐỒ -->
-    <section class="page" id="page-stylist">
-      <div class="section-head">
-        <div><h3>Phối đồ thông minh</h3><p>Gợi ý phối đồ theo sở thích và dịp sử dụng.</p></div>
-      </div>
-      <div class="card">
-        <div class="form-grid">
-          <div class="field">
-            <label for="styleChoice">Phong cách</label>
-            <select id="styleChoice">
-              <option>Tối giản</option>
-              <option>Năng động</option>
-              <option>Thanh lịch</option>
-              <option>Cá tính</option>
-              <option>Thoải mái</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="occasion">Dịp sử dụng</label>
-            <select id="occasion">
-              <option>Hằng ngày</option>
-              <option>Đi học</option>
-              <option>Đi làm</option>
-              <option>Hẹn hò</option>
-              <option>Dự tiệc</option>
-              <option>Du lịch</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn" id="generateOutfit">Tạo gợi ý phối đồ</button>
-        <p class="muted">Gợi ý dựa trên dữ liệu tủ đồ mẫu, chưa phải AI tạo sinh.</p>
-      </div>
-      <div class="grid2" id="outfitResults" style="margin-top:14px"></div>
-    </section>
+  <section id="page-products" class="page admin-page">
+   <h2>Sản phẩm và liên kết Affiliate</h2>
+   <form id="productForm" class="card"><div class="grid2"><div class="field"><label>Tên sản phẩm</label><input id="prodName" required></div><div class="field"><label>Thương hiệu</label><input id="prodBrand" required></div><div class="field"><label>Danh mục</label><select id="prodCategory"><option>Áo</option><option>Quần</option><option>Váy</option><option>Giày</option><option>Phụ kiện</option></select></div><div class="field"><label>Giá tham khảo</label><input id="prodPrice" placeholder="Ví dụ: 299.000đ"></div></div><div class="field"><label>URL HTTPS</label><input id="prodUrl" type="url" placeholder="https://example.com" required></div><button>Thêm sản phẩm</button></form><div id="productsList"></div>
+  </section>
 
-    <!-- SẢN PHẨM -->
-    <section class="page" id="page-products">
-      <div class="section-head">
-        <div><h3>Sản phẩm thời trang</h3><p>Sản phẩm tham khảo và liên kết thương hiệu.</p></div>
-      </div>
-      <div class="product-grid" id="productGrid"></div>
-    </section>
+  <section id="page-reports" class="page admin-page">
+   <h2>Báo cáo hiệu quả gợi ý</h2><div class="stats"><div class="stat">✧<strong id="rTotal">0</strong><span>Tổng lượt gợi ý</span></div><div class="stat">♡<strong id="rRating">0</strong><span>Đánh giá trung bình</span></div><div class="stat">✓<strong id="rSaved">0</strong><span>Bộ phối được lưu</span></div><div class="stat">▤<strong id="rFeedback">0</strong><span>Phản hồi</span></div></div><div id="reportsTable"></div>
+  </section>
 
-    <!-- HỒ SƠ -->
-    <section class="page" id="page-profile">
-      <div class="section-head">
-        <div><h3>Hồ sơ cá nhân</h3><p>Lưu thông tin và sở thích phong cách.</p></div>
-      </div>
-      <form id="profileForm" class="card">
-        <div class="form-grid">
-          <div class="field"><label for="pName">Họ và tên</label><input id="pName" name="name" required></div>
-          <div class="field"><label for="pAge">Tuổi</label><input id="pAge" name="age" type="number" min="1" max="120"></div>
-          <div class="field"><label for="pEmail">Email</label><input id="pEmail" type="email" disabled></div>
-          <div class="field"><label for="pCity">Thành phố</label><input id="pCity" name="city"></div>
-          <div class="field"><label for="pHeight">Chiều cao (cm)</label><input id="pHeight" name="height" type="number"></div>
-          <div class="field"><label for="pFit">Dáng trang phục yêu thích</label>
-            <select id="pFit" name="fit"><option>Thoải mái</option><option>Vừa vặn</option><option>Oversize</option></select>
-          </div>
-          <div class="field"><label for="pColors">Màu sắc yêu thích</label><input id="pColors" name="colors" placeholder="Trắng, be, xanh lá"></div>
-          <div class="field"><label for="pStyle">Phong cách yêu thích</label><input id="pStyle" name="style" placeholder="Tối giản, thanh lịch"></div>
-          <div class="field span2"><label for="pNotes">Ghi chú</label><textarea id="pNotes" name="notes"></textarea></div>
-        </div>
-        <button class="btn" type="submit">Lưu hồ sơ</button>
-      </form>
-    </section>
+  <section id="page-moderation" class="page admin-page">
+   <h2>Quản lý phản hồi người dùng</h2><div id="moderationTable"></div>
+  </section>
 
-    <!-- ADMIN: NGƯỜI DÙNG -->
-    <section class="page" id="page-adminUsers">
-      <div class="section-head">
-        <div><h3>Quản lý tài khoản người dùng</h3><p>Danh sách tài khoản demo.</p></div>
-        <button class="btn" id="addDemoUser">＋ Thêm tài khoản</button>
-      </div>
-      <div class="stats">
-        <div class="stat">♙<strong id="userCount">0</strong><span>Tổng tài khoản</span></div>
-        <div class="stat">✓<strong id="activeCount">0</strong><span>Đang hoạt động</span></div>
-      </div>
-      <div class="toolbar"><input id="userSearch" placeholder="Tìm theo tên hoặc email..."></div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Tên</th><th>Email</th><th>Vai trò</th><th>Ngày tạo</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
-        <tbody id="userRows"></tbody>
-      </table></div>
-    </section>
+  <section id="page-settings" class="page admin-page">
+   <h2>Cấu hình hệ thống</h2>
+   <form id="settingsForm" class="card"><div class="field"><label>Tên website</label><input id="siteName"></div><div class="field"><label>Số món đồ tối thiểu để gợi ý</label><input id="minItems" type="number" min="1" max="20"></div><div class="field"><label>Thông báo hệ thống</label><textarea id="systemNotice"></textarea></div><button>Lưu cấu hình</button></form>
+  </section>
 
-    <!-- ADMIN: TỦ ĐỒ -->
-    <section class="page" id="page-adminWardrobe">
-      <div class="section-head"><div><h3>Quản lý dữ liệu tủ đồ</h3><p>Tổng quan dữ liệu tủ đồ mẫu.</p></div></div>
-      <div class="stats">
-        <div class="stat">♧<strong id="adminWardrobeCount">0</strong><span>Tổng món đồ</span></div>
-        <div class="stat">♡<strong id="adminFavoriteCount">0</strong><span>Món yêu thích</span></div>
-      </div>
-      <div class="wardrobe-grid" id="adminWardrobeList" style="margin-top:14px"></div>
-    </section>
-
-    <!-- ADMIN: SẢN PHẨM -->
-    <section class="page" id="page-adminProducts">
-      <div class="section-head">
-        <div><h3>Quản lý sản phẩm</h3><p>Sản phẩm đang hiển thị trong demo.</p></div>
-        <button class="btn" id="addAdminProduct">＋ Thêm sản phẩm</button>
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Sản phẩm</th><th>Thương hiệu</th><th>Danh mục</th><th>Liên kết</th><th>Thao tác</th></tr></thead>
-        <tbody id="adminProductRows"></tbody>
-      </table></div>
-    </section>
-
-    <!-- ADMIN: NỘI DUNG -->
-    <section class="page" id="page-adminContent">
-      <div class="section-head"><div><h3>Quản lý nội dung</h3><p>Chỉnh sửa phần giới thiệu trang tổng quan.</p></div></div>
-      <form class="card" id="contentForm">
-        <div class="field"><label for="contentTitle">Tiêu đề</label><input id="contentTitle" value="Ít băn khoăn hơn. Thêm tự tin mỗi ngày." required></div>
-        <div class="field"><label for="contentDescription">Mô tả</label><textarea id="contentDescription">Quản lý trang phục, xây dựng phong cách và khám phá cách phối đồ cùng WearAI.</textarea></div>
-        <button class="btn" type="submit">Lưu nội dung</button>
-      </form>
-    </section>
-
-    <!-- ADMIN: BÁO CÁO -->
-    <section class="page" id="page-adminReports">
-      <div class="section-head">
-        <div><h3>Thống kê và báo cáo</h3><p>Doanh thu, lượt nhấp affiliate và hoa hồng minh họa.</p></div>
-        <button class="btn light" id="exportAffiliateBtn">Xuất báo cáo CSV</button>
-      </div>
-
-      <div class="notice warn">
-        Các số liệu doanh thu, lượt nhấp và hoa hồng là dữ liệu demo, không phải
-        số liệu giao dịch thực tế. Link thương hiệu không tự động trở thành link affiliate.
-      </div>
-
-      <div class="stats">
-        <div class="stat">↗<strong id="reportClicks">0</strong><span>Lượt nhấp mẫu</span></div>
-        <div class="stat">▣<strong id="reportOrders">0</strong><span>Đơn hàng mẫu</span></div>
-        <div class="stat">₫<strong id="reportRevenue">0 ₫</strong><span>Tổng giá trị đơn hàng</span></div>
-        <div class="stat">₫<strong id="reportCommission">0 ₫</strong><span>Hoa hồng dự kiến</span></div>
-      </div>
-
-      <div class="section-head">
-        <div><h3>Đối tác affiliate</h3><p>Đường dẫn tham khảo và tỷ lệ hoa hồng giả lập.</p></div>
-        <button class="btn" id="addPartnerBtn">＋ Thêm đối tác</button>
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Đối tác</th><th>Liên kết</th><th>Lượt nhấp</th><th>Đơn hàng</th><th>Doanh thu</th><th>Tỷ lệ</th><th>Hoa hồng</th></tr></thead>
-        <tbody id="affiliateRows"></tbody>
-      </table></div>
-
-      <div class="section-head"><div><h3>Đối soát hoa hồng</h3><p>Trạng thái thanh toán demo.</p></div></div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Mã</th><th>Đối tác</th><th>Đơn hàng</th><th>Giá trị</th><th>Hoa hồng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
-        <tbody id="commissionRows"></tbody>
-      </table></div>
-    </section>
-
-    <!-- ADMIN: HỆ THỐNG -->
-    <section class="page" id="page-adminSystem">
-      <div class="section-head"><div><h3>Hoạt động hệ thống</h3><p>Nhật ký minh họa của giao diện.</p></div></div>
-      <div class="notice warn">Đây không phải nhật ký máy chủ thực tế.</div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Thời gian</th><th>Hoạt động</th><th>Trạng thái</th></tr></thead>
-        <tbody id="systemRows"></tbody>
-      </table></div>
-    </section>
-
-    <div class="footer">WearAI © 2026 · Tủ đồ số cá nhân của bạn</div>
-  </main>
+  <section id="page-logs" class="page admin-page">
+   <h2>Nhật ký hoạt động</h2><p class="muted">Nhật ký demo được lưu trong trình duyệt, không phải log máy chủ.</p><div id="logsTable"></div><button class="light" id="exportLogs">Xuất nhật ký CSV</button>
+  </section>
+ </main>
 </div>
-
-<div id="toast" class="toast hidden" role="status"></div>
+<div id="toast" class="hidden" role="status"></div>
 
 <script>
 'use strict';
-
-/* =====================================================
-   1. HÀM CƠ BẢN VÀ LƯU TRỮ
-===================================================== */
-const $ = selector => document.querySelector(selector);
-const $$ = selector => [...document.querySelectorAll(selector)];
-
-const STORAGE = {
-  clothes:'wearai_fixed_clothes',
-  users:'wearai_fixed_users',
-  profiles:'wearai_fixed_profiles',
-  commissions:'wearai_fixed_commissions',
-  partners:'wearai_fixed_partners',
-  products:'wearai_fixed_products',
-  content:'wearai_fixed_content'
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const KEY='wearai_v2';
+const today=()=>new Date().toISOString().slice(0,10);
+const photos={
+ 'Áo':'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80',
+ 'Quần':'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=700&q=80',
+ 'Váy':'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80',
+ 'Giày':'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80',
+ 'Phụ kiện':'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=700&q=80'
 };
-
-const today = new Date().toISOString().slice(0,10);
-
-function readJSON(key,fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw === null ? fallback : JSON.parse(raw);
-  } catch (error) {
-    return fallback;
-  }
+const defaults=()=>({
+ users:[
+ {email:'admin@wearai.demo',name:'Quản trị viên',password:'Admin123!',role:'admin',status:'Hoạt động',joined:'2026-08-01'},
+ {email:'linh@wearai.demo',name:'Linh Nguyễn',password:'User123!',role:'user',status:'Hoạt động',joined:'2026-09-12'}
+ ],
+ clothes:[
+ {id:'c1',owner:'linh@wearai.demo',name:'Áo thun trắng',category:'Áo',color:'Trắng',favorite:true},
+ {id:'c2',owner:'linh@wearai.demo',name:'Quần jeans',category:'Quần',color:'Xanh',favorite:false},
+ {id:'c3',owner:'linh@wearai.demo',name:'Sneaker trắng',category:'Giày',color:'Trắng',favorite:false},
+ {id:'c4',owner:'linh@wearai.demo',name:'Váy be',category:'Váy',color:'Be',favorite:true}
+ ],
+ outfits:[],feedback:[],trends:[],rules:[
+ {id:'r1',name:'Phối màu trung tính',desc:'Ưu tiên trắng, đen, be và xanh denim.'},
+ {id:'r2',name:'Phối theo dịp',desc:'Chọn trang phục phù hợp hoàn cảnh sử dụng.'}
+ ],
+ criteria:['Áo','Quần','Giày'],products:[],logs:[],
+ settings:{siteName:'WearAI',minItems:2,notice:'Chào mừng đến với WearAI'}
+});
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY))||defaults()}catch{db=defaults()}
+const persist=()=>{localStorage.setItem(KEY,JSON.stringify(db));};
+let current=null,generated=0;
+const names={home:'Tổng quan & thời tiết',wardrobe:'Tủ đồ cá nhân',outfits:'Bộ phối đồ',missing:'Đồ còn thiếu',feedback:'Đánh giá & phản hồi',profile:'Hồ sơ cá nhân',users:'Quản lý người dùng',adminWardrobe:'Quản lý tủ đồ',trends:'Xu hướng thời trang',rules:'Quy tắc phối đồ',criteria:'Tiêu chí đồ còn thiếu',products:'Sản phẩm & Affiliate',reports:'Hiệu quả gợi ý',moderation:'Quản lý phản hồi',settings:'Cấu hình hệ thống',logs:'Nhật ký hoạt động'};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function msg(s){const e=$('#toast');e.textContent=s;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),2600)}
+function log(action){db.logs.unshift({date:new Date().toLocaleString('vi-VN'),user:current?.email||'Khách',action});db.logs=db.logs.slice(0,300);persist()}
+function rows(headers,body){return '<div class="table-wrap"><table><thead><tr>'+headers.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>'+body+'</tbody></table></div>'}
+function allowedAdmin(){if(current?.role!=='admin'){msg('Chức năng chỉ dành cho quản trị viên.');return false}return true}
+function myClothes(){return db.clothes.filter(x=>x.owner===current?.email)}
+function login(email){
+ const u=db.users.find(x=>x.email===email);
+ if(!u||u.status!=='Hoạt động')return;
+ current=u;
+ $('#login').classList.add('hidden');$('#app').classList.remove('hidden');
+ $('#adminMenu').classList.toggle('hidden',u.role!=='admin');
+ $('#sideName').textContent=u.name;$('#sideRole').textContent=u.role==='admin'?'Quản trị viên':'Người dùng';
+ $('#roleBadge').textContent=u.role==='admin'?'QUẢN TRỊ VIÊN':'NGƯỜI DÙNG';
+ log('Đăng nhập');renderAll();go('home');weather();
 }
-
-function saveJSON(key,value) {
-  try {
-    localStorage.setItem(key,JSON.stringify(value));
-  } catch (error) {
-    toast('Không thể lưu dữ liệu trên trình duyệt.');
-  }
-}
-
-function safe(value) {
-  return String(value ?? '').replace(/[&<>"']/g,char => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  })[char]);
-}
-
-function money(value) {
-  return new Intl.NumberFormat('vi-VN',{
-    style:'currency',
-    currency:'VND',
-    maximumFractionDigits:0
-  }).format(Number(value)||0);
-}
-
-let toastTimer;
-
-function toast(message) {
-  const el = $('#toast');
-  el.textContent = message;
-  el.classList.remove('hidden');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.add('hidden'),2800);
-}
-
-/* =====================================================
-   2. DỮ LIỆU DEMO
-===================================================== */
-const clothingPhotos = {
-  'Áo':'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80',
-  'Quần':'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=700&q=80',
-  'Váy':'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=700&q=80',
-  'Giày':'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80',
-  'Phụ kiện':'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=700&q=80'
+$('#loginForm').addEventListener('submit',e=>{
+ e.preventDefault();const email=$('#email').value.trim().toLowerCase(),pass=$('#password').value;
+ const u=db.users.find(x=>x.email===email&&x.password===pass&&x.status==='Hoạt động');
+ if(!u){$('#authMessage').textContent='Thông tin không đúng hoặc tài khoản đã bị khóa.';return}
+ login(email);
+});
+$('#showRegister').onclick=()=>{
+ const name=prompt('Họ và tên:');if(!name?.trim())return;
+ const email=prompt('Email:')?.trim().toLowerCase();
+ if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg('Email không hợp lệ');return}
+ if(db.users.some(x=>x.email===email)){msg('Email đã tồn tại');return}
+ const password=prompt('Tạo mật khẩu (ít nhất 6 ký tự):');
+ if(!password||password.length<6){msg('Mật khẩu cần ít nhất 6 ký tự');return}
+ db.users.push({email,name:name.trim(),password,role:'user',status:'Hoạt động',joined:today()});
+ persist();msg('Đăng ký thành công. Hãy đăng nhập.');
+ $('#email').value=email;
 };
-
-let clothes = readJSON(STORAGE.clothes,[
-  {id:'i1',name:'Áo thun trắng cotton',category:'Áo',color:'Trắng',favorite:true},
-  {id:'i2',name:'Quần jeans xanh',category:'Quần',color:'Xanh denim',favorite:false},
-  {id:'i3',name:'Váy mặc hằng ngày',category:'Váy',color:'Be',favorite:true},
-  {id:'i4',name:'Sneaker thể thao',category:'Giày',color:'Trắng',favorite:false},
-  {id:'i5',name:'Phụ kiện tối giản',category:'Phụ kiện',color:'Vàng',favorite:false}
-]);
-
-let users = readJSON(STORAGE.users,[
-  {name:'Quản trị viên',email:'admin@wearai.demo',role:'Quản trị viên',joined:'2026-08-01',status:'Hoạt động'},
-  {name:'Linh Nguyễn',email:'linh@wearai.demo',role:'Người dùng',joined:'2026-09-12',status:'Hoạt động'}
-]);
-
-const demoCredentials = {
-  'admin@wearai.demo':{password:'Admin123!',admin:true,name:'Quản trị viên'},
-  'linh@wearai.demo':{password:'User123!',admin:false,name:'Linh Nguyễn'}
+function logout(){if(current)log('Đăng xuất');current=null;$('#app').classList.add('hidden');$('#login').classList.remove('hidden');$('#password').value=''}
+$('#logout').onclick=logout;$('#logout2').onclick=logout;
+function go(p){
+ if(!names[p])return;
+ if(['users','adminWardrobe','trends','rules','criteria','products','reports','moderation','settings','logs'].includes(p)&&!allowedAdmin())return;
+ $$('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));
+ $$('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
+ $('#pageTitle').textContent=names[p];renderPage(p);
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+$$('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+$$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+function renderClothes(){
+ const q=($('#searchClothes')?.value||'').toLowerCase(),cat=$('#filterCategory')?.value||'',color=$('#filterColor')?.value||'';
+ const items=myClothes().filter(x=>(x.name+' '+x.color+' '+x.category).toLowerCase().includes(q)&&(!cat||x.category===cat)&&(!color||x.color.includes(color)));
+ $('#clothesGrid').innerHTML=items.map(x=>`<article class="item"><img class="photo" src="${photos[x.category]||photos['Áo']}" alt="${esc(x.name)}"><div class="item-body"><h3>${esc(x.name)}</h3><p class="muted">${esc(x.category)} · ${esc(x.color)}</p><div class="actions"><button class="light" data-fav="${x.id}">${x.favorite?'♥ Đã thích':'♡ Yêu thích'}</button><button class="light" data-edit="${x.id}">Sửa</button><button class="danger" data-del="${x.id}">Xóa</button></div></div></article>`).join('')||'<div class="empty">Chưa có trang phục phù hợp.</div>';
+ $('#clothesCount').textContent=myClothes().length;
+ $('#favCount').textContent=myClothes().filter(x=>x.favorite).length;
+}
+$('#clothesGrid').onclick=e=>{
+ const b=e.target.closest('button');if(!b)return;
+ let x=db.clothes.find(x=>x.id===b.dataset.fav||x.id===b.dataset.del||x.id===b.dataset.edit);
+ if(!x)return;
+ if(b.dataset.fav){x.favorite=!x.favorite;log('Thay đổi yêu thích: '+x.name)}
+ if(b.dataset.del){if(!confirm('Xóa trang phục này?'))return;db.clothes=db.clothes.filter(y=>y.id!==x.id);log('Xóa trang phục: '+x.name)}
+ if(b.dataset.edit){
+  const name=prompt('Tên trang phục:',x.name);if(!name?.trim())return;
+  const color=prompt('Màu sắc:',x.color);const cat=prompt('Danh mục (Áo, Quần, Váy, Giày, Phụ kiện):',x.category);
+  x.name=name.trim();x.color=color||x.color;x.category=['Áo','Quần','Váy','Giày','Phụ kiện'].includes(cat)?cat:x.category;log('Sửa trang phục: '+x.name);
+ }
+ persist();renderAll();
 };
-
-let profiles = readJSON(STORAGE.profiles,{});
-let currentUser = null;
-
-let products = readJSON(STORAGE.products,[
-  {id:'p1',name:'Áo thun cotton basic',brand:'UNIQLO',category:'Áo',price:'Tham khảo',photo:clothingPhotos['Áo'],url:'https://www.uniqlo.com/'},
-  {id:'p2',name:'Quần jeans hằng ngày',brand:'Canifa',category:'Quần',price:'Tham khảo',photo:clothingPhotos['Quần'],url:'https://canifa.com/'},
-  {id:'p3',name:'Váy thanh lịch',brand:'Canifa',category:'Váy',price:'Tham khảo',photo:clothingPhotos['Váy'],url:'https://canifa.com/'},
-  {id:'p4',name:'Sneaker năng động',brand:'WearAI Select',category:'Giày',price:'Tham khảo',photo:clothingPhotos['Giày'],url:'https://www.uniqlo.com/'}
-]);
-
-let partners = readJSON(STORAGE.partners,[
-  {id:'a1',name:'UNIQLO',url:'https://www.uniqlo.com/',clicks:128,orders:9,revenue:4500000,rate:0.05},
-  {id:'a2',name:'Canifa',url:'https://canifa.com/',clicks:94,orders:6,revenue:2700000,rate:0.04},
-  {id:'a3',name:'WearAI Select',url:'https://www.uniqlo.com/',clicks:53,orders:3,revenue:1200000,rate:0.03}
-]);
-
-let commissions = readJSON(STORAGE.commissions,[
-  {id:'WA-1001',partner:'UNIQLO',orders:4,revenue:1800000,commission:90000,status:'Chưa thanh toán'},
-  {id:'WA-1002',partner:'Canifa',orders:3,revenue:1350000,commission:54000,status:'Đã thanh toán'},
-  {id:'WA-1003',partner:'WearAI Select',orders:2,revenue:800000,commission:24000,status:'Chưa thanh toán'}
-]);
-
-const titles = {
-  home:'Chào bạn, hôm nay mặc gì?',
-  wardrobe:'Tủ đồ của tôi',
-  stylist:'Phối đồ thông minh',
-  products:'Sản phẩm thời trang',
-  profile:'Hồ sơ cá nhân',
-  adminUsers:'Quản lý tài khoản người dùng',
-  adminWardrobe:'Quản lý dữ liệu tủ đồ',
-  adminProducts:'Quản lý sản phẩm',
-  adminContent:'Quản lý nội dung',
-  adminReports:'Thống kê và báo cáo',
-  adminSystem:'Hoạt động hệ thống'
+$('#addClothing').onclick=()=>{
+ const name=prompt('Tên trang phục:');if(!name?.trim())return;
+ const cat=prompt('Danh mục: Áo, Quần, Váy, Giày, Phụ kiện','Áo');
+ const color=prompt('Màu sắc','Trắng');
+ db.clothes.push({id:crypto.randomUUID(),owner:current.email,name:name.trim(),category:['Áo','Quần','Váy','Giày','Phụ kiện'].includes(cat)?cat:'Áo',color:color||'Chưa rõ',favorite:false});
+ persist();log('Thêm trang phục');renderAll();msg('Đã thêm trang phục');
 };
-
-/* =====================================================
-   3. LƯU DỮ LIỆU
-===================================================== */
-function persist() {
-  saveJSON(STORAGE.clothes,clothes);
-  saveJSON(STORAGE.users,users);
-  saveJSON(STORAGE.profiles,profiles);
-  saveJSON(STORAGE.products,products);
-  saveJSON(STORAGE.partners,partners);
-  saveJSON(STORAGE.commissions,commissions);
-  renderAll();
+$('#searchClothes').oninput=renderClothes;$('#filterCategory').onchange=renderClothes;$('#filterColor').onchange=renderClothes;
+function renderOutfits(){
+ const os=db.outfits.filter(x=>x.owner===current.email);
+ $('#outfitCount').textContent=os.length;
+ $('#outfitsGrid').innerHTML=os.map(o=>`<div class="card"><h3>${esc(o.style)}</h3><p class="muted">${esc(o.occasion)} · ${esc(o.date)}</p><p>${o.items.map(esc).join(' + ')}</p><button class="danger" data-outfit-del="${o.id}">Xóa bộ đồ</button></div>`).join('')||'<div class="empty">Chưa lưu bộ phối đồ.</div>';
+ $('#feedbackOutfit').innerHTML=os.map(o=>`<option value="${o.id}">${esc(o.style)} - ${esc(o.occasion)}</option>`).join('');
 }
-
-/* =====================================================
-   4. ĐĂNG NHẬP — KHỞI TẠO SAU KHI DOM ĐÃ SẴN SÀNG
-===================================================== */
-function showLoginError(message) {
-  const error = $('#loginError');
-  error.textContent = message;
-  error.hidden = false;
-}
-
-function clearLoginError() {
-  $('#loginError').textContent = '';
-  $('#loginError').hidden = true;
-}
-
-function signIn(email,account) {
-  currentUser = {
-    email,
-    admin:account.admin,
-    name:account.name
-  };
-
-  $('#loginScreen').classList.add('hidden');
-  $('#app').classList.remove('hidden');
-  $('#app').classList.toggle('is-admin',account.admin);
-
-  $('#roleBadge').textContent = account.admin ? 'QUẢN TRỊ VIÊN' : 'NGƯỜI DÙNG';
-  $('#sideUserName').textContent = account.name;
-  $('#sideUserRole').textContent = account.admin ? 'Quản trị viên WearAI' : 'Tài khoản người dùng';
-  $('#topAvatar').textContent = account.name.charAt(0).toUpperCase();
-
-  clearLoginError();
-  goPage(account.admin ? 'adminUsers' : 'home');
-  renderAll();
-}
-
-$('#loginForm').addEventListener('submit',event => {
-  event.preventDefault();
-
-  const email = $('#loginEmail').value.trim().toLowerCase();
-  const password = $('#loginPassword').value;
-
-  const account = demoCredentials[email];
-
-  if (!account || account.password !== password) {
-    showLoginError('Email hoặc mật khẩu không chính xác. Hãy dùng một trong hai tài khoản demo được ghi bên dưới.');
-    return;
-  }
-
-  signIn(email,account);
-});
-
-$('#fillAdminLogin').addEventListener('click',() => {
-  $('#loginEmail').value = 'admin@wearai.demo';
-  $('#loginPassword').value = 'Admin123!';
-  clearLoginError();
-});
-
-$('#fillUserLogin').addEventListener('click',() => {
-  $('#loginEmail').value = 'linh@wearai.demo';
-  $('#loginPassword').value = 'User123!';
-  clearLoginError();
-});
-
-$('#loginEmail').addEventListener('input',clearLoginError);
-$('#loginPassword').addEventListener('input',clearLoginError);
-
-function logout() {
-  currentUser = null;
-  $('#app').classList.add('hidden');
-  $('#loginScreen').classList.remove('hidden');
-  $('#loginPassword').value = '';
-  clearLoginError();
-}
-
-$('#logoutBtn').addEventListener('click',logout);
-$('#topLogout').addEventListener('click',logout);
-
-/* =====================================================
-   5. CHUYỂN TRANG VÀ PHÂN QUYỀN
-===================================================== */
-function goPage(page) {
-  const element = $('#page-' + page);
-  if (!element) return;
-
-  if (page.startsWith('admin') && !currentUser?.admin) {
-    toast('Bạn cần đăng nhập bằng tài khoản quản trị viên.');
-    return;
-  }
-
-  $$('.page').forEach(item => item.classList.toggle('active',item === element));
-  $$('[data-page]').forEach(button => button.classList.toggle('active',button.dataset.page === page));
-
-  $('#pageTitle').textContent = titles[page] || 'WearAI';
-
-  if (page === 'profile') fillProfile();
-  if (page.startsWith('admin')) renderAdmin();
-  if (page === 'adminReports') renderAffiliateReport();
-
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-$$('[data-page]').forEach(button => {
-  button.addEventListener('click',() => goPage(button.dataset.page));
-});
-
-$$('[data-go]').forEach(button => {
-  button.addEventListener('click',() => goPage(button.dataset.go));
-});
-
-/* =====================================================
-   6. TỦ ĐỒ
-===================================================== */
-function itemCard(item,adminMode=false) {
-  const photo = clothingPhotos[item.category] || clothingPhotos['Áo'];
-
-  return `
-    <article class="item-card">
-      <img class="item-photo" src="${photo}" alt="${safe(item.name)}"
-        loading="lazy" onerror="this.onerror=null;this.src='${clothingPhotos['Áo']}';">
-      <div class="item-body">
-        <h4>${safe(item.name)}</h4>
-        <p>${safe(item.category)} · ${safe(item.color || 'Chưa ghi màu')}</p>
-        ${adminMode ? '' : `
-          <div class="actions">
-            <button class="btn light" data-favorite="${safe(item.id)}">
-              ${item.favorite ? '♥ Đã thích' : '♡ Yêu thích'}
-            </button>
-            <button class="btn danger" data-delete-clothing="${safe(item.id)}">Xóa</button>
-          </div>
-        `}
-      </div>
-    </article>`;
-}
-
-function renderClothes() {
-  const query = ($('#wardrobeSearch')?.value || '').toLowerCase();
-  const category = $('#wardrobeCategory')?.value || 'all';
-
-  const filtered = clothes.filter(item =>
-    (item.name + ' ' + item.category + ' ' + item.color).toLowerCase().includes(query) &&
-    (category === 'all' || item.category === category)
-  );
-
-  $('#wardrobeGrid').innerHTML =
-    filtered.map(item => itemCard(item)).join('') ||
-    '<div class="empty">Chưa có món đồ phù hợp.</div>';
-
-  $('#homeWardrobe').innerHTML =
-    clothes.slice(0,3).map(item => itemCard(item)).join('') ||
-    '<div class="empty">Tủ đồ đang trống. Hãy thêm trang phục đầu tiên.</div>';
-
-  $('#adminWardrobeList').innerHTML =
-    clothes.map(item => itemCard(item,true)).join('') ||
-    '<div class="empty">Chưa có dữ liệu.</div>';
-
-  $('#statClothes').textContent = clothes.length;
-  $('#statFavorites').textContent = clothes.filter(item => item.favorite).length;
-  $('#adminWardrobeCount').textContent = clothes.length;
-  $('#adminFavoriteCount').textContent = clothes.filter(item => item.favorite).length;
-}
-
-$('#wardrobeGrid').addEventListener('click',event => {
-  const favoriteButton = event.target.closest('[data-favorite]');
-  const deleteButton = event.target.closest('[data-delete-clothing]');
-
-  if (favoriteButton) {
-    const item = clothes.find(x => x.id === favoriteButton.dataset.favorite);
-    if (item) {
-      item.favorite = !item.favorite;
-      persist();
-      toast('Đã cập nhật danh sách yêu thích.');
-    }
-  }
-
-  if (deleteButton) {
-    const id = deleteButton.dataset.deleteClothing;
-    if (confirm('Bạn có chắc muốn xóa món đồ này?')) {
-      clothes = clothes.filter(item => item.id !== id);
-      persist();
-      toast('Đã xóa trang phục.');
-    }
-  }
-});
-
-$('#homeWardrobe').addEventListener('click',event => {
-  const favoriteButton = event.target.closest('[data-favorite]');
-  const deleteButton = event.target.closest('[data-delete-clothing]');
-
-  if (favoriteButton) {
-    const item = clothes.find(x => x.id === favoriteButton.dataset.favorite);
-    if (item) {
-      item.favorite = !item.favorite;
-      persist();
-      toast('Đã cập nhật danh sách yêu thích.');
-    }
-  }
-
-  if (deleteButton) {
-    if (confirm('Bạn có chắc muốn xóa món đồ này?')) {
-      clothes = clothes.filter(item => item.id !== deleteButton.dataset.deleteClothing);
-      persist();
-      toast('Đã xóa trang phục.');
-    }
-  }
-});
-
-$('#addClothing').addEventListener('click',() => {
-  const name = prompt('Tên trang phục:');
-  if (!name?.trim()) return;
-
-  const categoryInput = prompt('Danh mục: Áo, Quần, Váy, Giày hoặc Phụ kiện','Áo');
-  const allowed = ['Áo','Quần','Váy','Giày','Phụ kiện'];
-  const category = allowed.includes(categoryInput) ? categoryInput : 'Áo';
-  const color = prompt('Màu sắc:','Trắng') || 'Chưa rõ';
-
-  clothes.unshift({
-    id:'item-' + Date.now(),
-    name:name.trim(),
-    category,
-    color,
-    favorite:false
-  });
-
-  persist();
-  toast('Đã thêm trang phục vào tủ đồ.');
-});
-
-$('#wardrobeSearch').addEventListener('input',renderClothes);
-$('#wardrobeCategory').addEventListener('change',renderClothes);
-
-/* =====================================================
-   7. SẢN PHẨM
-===================================================== */
-function renderProducts() {
-  $('#productGrid').innerHTML = products.map(product => `
-    <article class="product-card">
-      <img class="product-photo" src="${clothingPhotos[product.category] || clothingPhotos['Áo']}"
-        alt="${safe(product.name)}" loading="lazy">
-      <div class="product-body">
-        <h4>${safe(product.name)}</h4>
-        <p>${safe(product.brand)} · ${safe(product.category)}</p>
-        <p>${safe(product.price || 'Tham khảo')}</p>
-        <div class="actions">
-          <a href="${safe(product.url)}" target="_blank" rel="noopener noreferrer">
-            <button class="btn light" type="button">Xem thương hiệu ↗</button>
-          </a>
-          <button class="btn" data-save-product="${safe(product.id)}">Lưu vào tủ</button>
-        </div>
-      </div>
-    </article>
-  `).join('') || '<div class="empty">Chưa có sản phẩm.</div>';
-
-  $('#adminProductRows').innerHTML = products.map(product => `
-    <tr>
-      <td>${safe(product.name)}</td>
-      <td>${safe(product.brand)}</td>
-      <td>${safe(product.category)}</td>
-      <td><a href="${safe(product.url)}" target="_blank" rel="noopener noreferrer">Mở liên kết ↗</a></td>
-      <td><button class="btn danger" data-hide-product="${safe(product.id)}">Xóa mẫu</button></td>
-    </tr>
-  `).join('');
-
-  $('#statProducts').textContent = products.length;
-}
-
-$('#productGrid').addEventListener('click',event => {
-  const button = event.target.closest('[data-save-product]');
-  if (!button) return;
-
-  const product = products.find(item => item.id === button.dataset.saveProduct);
-  if (!product) return;
-
-  clothes.unshift({
-    id:'item-' + Date.now(),
-    name:product.name,
-    category:product.category,
-    color:'Tham khảo',
-    favorite:false
-  });
-
-  persist();
-  toast('Đã lưu sản phẩm vào tủ đồ.');
-});
-
-$('#adminProductRows').addEventListener('click',event => {
-  const button = event.target.closest('[data-hide-product]');
-  if (!button || !currentUser?.admin) return;
-
-  products = products.filter(item => item.id !== button.dataset.hideProduct);
-  persist();
-  toast('Đã xóa sản phẩm mẫu.');
-});
-
-$('#addAdminProduct').addEventListener('click',() => {
-  if (!currentUser?.admin) return;
-
-  const name = prompt('Tên sản phẩm:');
-  if (!name?.trim()) return;
-
-  products.push({
-    id:'product-' + Date.now(),
-    name:name.trim(),
-    brand:'WearAI Select',
-    category:'Áo',
-    price:'Tham khảo',
-    url:'https://www.uniqlo.com/'
-  });
-
-  persist();
-  toast('Đã thêm sản phẩm mẫu.');
-});
-
-/* =====================================================
-   8. HỒ SƠ CÁ NHÂN
-===================================================== */
-function fillProfile() {
-  if (!currentUser) return;
-
-  const profile = profiles[currentUser.email] || {};
-
-  $('#pName').value = profile.name || currentUser.name;
-  $('#pAge').value = profile.age || '';
-  $('#pEmail').value = currentUser.email;
-  $('#pCity').value = profile.city || '';
-  $('#pHeight').value = profile.height || '';
-  $('#pFit').value = profile.fit || 'Thoải mái';
-  $('#pColors').value = profile.colors || '';
-  $('#pStyle').value = profile.style || '';
-  $('#pNotes').value = profile.notes || '';
-}
-
-$('#profileForm').addEventListener('submit',event => {
-  event.preventDefault();
-  if (!currentUser) return;
-
-  profiles[currentUser.email] = {
-    name:$('#pName').value.trim(),
-    age:$('#pAge').value,
-    city:$('#pCity').value.trim(),
-    height:$('#pHeight').value,
-    fit:$('#pFit').value,
-    colors:$('#pColors').value.trim(),
-    style:$('#pStyle').value.trim(),
-    notes:$('#pNotes').value.trim()
-  };
-
-  currentUser.name = profiles[currentUser.email].name || currentUser.name;
-  $('#sideUserName').textContent = currentUser.name;
-  $('#topAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-
-  saveJSON(STORAGE.profiles,profiles);
-  toast('Đã lưu hồ sơ trên trình duyệt.');
-});
-
-/* =====================================================
-   9. PHỐI ĐỒ DEMO
-===================================================== */
-$('#generateOutfit').addEventListener('click',() => {
-  const style = $('#styleChoice').value;
-  const occasion = $('#occasion').value;
-  const chosen = clothes.slice(0,3);
-  const profile = currentUser ? (profiles[currentUser.email] || {}) : {};
-
-  $('#outfitResults').innerHTML = `
-    <div class="card">
-      <h3>✧ Phong cách ${safe(style.toLowerCase())}</h3>
-      <p class="muted">Dịp sử dụng: ${safe(occasion)}</p>
-      <p>${chosen.map(item => safe(item.name)).join(' + ') || 'Hãy thêm trang phục vào tủ đồ.'}</p>
-    </div>
-    <div class="card">
-      <h3>♡ Ưu tiên cá nhân</h3>
-      <p class="muted">${safe(profile.fit || 'Thoải mái')} · ${safe(profile.colors || 'Màu trung tính')}</p>
-      <p class="muted">Đây là gợi ý dựa trên quy tắc demo, không phải kết quả AI thực tế.</p>
-    </div>
-  `;
-});
-
-/* =====================================================
-   10. BÁO CÁO AFFILIATE
-===================================================== */
-function renderAffiliateReport() {
-  const totalClicks = partners.reduce((sum,item) => sum + Number(item.clicks || 0),0);
-  const totalOrders = partners.reduce((sum,item) => sum + Number(item.orders || 0),0);
-  const totalRevenue = partners.reduce((sum,item) => sum + Number(item.revenue || 0),0);
-  const totalCommission = partners.reduce((sum,item) => sum + Number(item.revenue || 0) * Number(item.rate || 0),0);
-
-  $('#reportClicks').textContent = totalClicks.toLocaleString('vi-VN');
-  $('#reportOrders').textContent = totalOrders.toLocaleString('vi-VN');
-  $('#reportRevenue').textContent = money(totalRevenue);
-  $('#reportCommission').textContent = money(totalCommission);
-
-  $('#affiliateRows').innerHTML = partners.map(partner => `
-    <tr>
-      <td>${safe(partner.name)}</td>
-      <td><a href="${safe(partner.url)}" target="_blank" rel="noopener noreferrer">Mở liên kết ↗</a></td>
-      <td>${Number(partner.clicks || 0).toLocaleString('vi-VN')}</td>
-      <td>${Number(partner.orders || 0).toLocaleString('vi-VN')}</td>
-      <td>${money(partner.revenue)}</td>
-      <td>${(Number(partner.rate || 0) * 100).toFixed(1)}%</td>
-      <td>${money(Number(partner.revenue || 0) * Number(partner.rate || 0))}</td>
-    </tr>
-  `).join('');
-
-  $('#commissionRows').innerHTML = commissions.map(record => `
-    <tr>
-      <td>${safe(record.id)}</td>
-      <td>${safe(record.partner)}</td>
-      <td>${Number(record.orders || 0)}</td>
-      <td>${money(record.revenue)}</td>
-      <td>${money(record.commission)}</td>
-      <td><span class="pill ${record.status === 'Đã thanh toán' ? '' : 'pending'}">${safe(record.status)}</span></td>
-      <td>
-        <button class="btn light" data-toggle-commission="${safe(record.id)}">
-          ${record.status === 'Đã thanh toán' ? 'Đánh dấu chưa trả' : 'Đánh dấu đã trả'}
-        </button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-$('#commissionRows').addEventListener('click',event => {
-  const button = event.target.closest('[data-toggle-commission]');
-  if (!button || !currentUser?.admin) return;
-
-  const record = commissions.find(item => item.id === button.dataset.toggleCommission);
-  if (!record) return;
-
-  record.status = record.status === 'Đã thanh toán' ? 'Chưa thanh toán' : 'Đã thanh toán';
-  saveJSON(STORAGE.commissions,commissions);
-  renderAffiliateReport();
-  toast('Đã cập nhật trạng thái đối soát demo.');
-});
-
-$('#addPartnerBtn').addEventListener('click',() => {
-  if (!currentUser?.admin) return;
-
-  const name = prompt('Tên đối tác:');
-  if (!name?.trim()) return;
-
-  const url = prompt('URL đối tác (https://...)');
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== 'https:') throw new Error('https required');
-
-    partners.push({
-      id:'affiliate-' + Date.now(),
-      name:name.trim(),
-      url:parsed.href,
-      clicks:0,
-      orders:0,
-      revenue:0,
-      rate:0.03
-    });
-
-    saveJSON(STORAGE.partners,partners);
-    renderAffiliateReport();
-    toast('Đã thêm đối tác mẫu.');
-  } catch (error) {
-    toast('URL không hợp lệ. Hãy nhập địa chỉ bắt đầu bằng https://');
-  }
-});
-
-$('#exportAffiliateBtn').addEventListener('click',() => {
-  if (!currentUser?.admin) return;
-
-  const rows = [
-    ['Đối tác','URL','Lượt nhấp demo','Đơn hàng demo','Doanh thu demo','Tỷ lệ hoa hồng','Hoa hồng dự kiến'],
-    ...partners.map(partner => [
-      partner.name,
-      partner.url,
-      partner.clicks,
-      partner.orders,
-      partner.revenue,
-      partner.rate,
-      Number(partner.revenue || 0) * Number(partner.rate || 0)
-    ])
-  ];
-
-  const csv = '\uFEFF' + rows.map(row =>
-    row.map(value => '"' + String(value ?? '').replace(/"/g,'""') + '"').join(',')
-  ).join('\r\n');
-
-  const blob = new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-
-  anchor.href = url;
-  anchor.download = 'wearai-affiliate-report.csv';
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
-});
-
-/* =====================================================
-   11. QUẢN TRỊ NGƯỜI DÙNG VÀ HỆ THỐNG
-===================================================== */
-function renderAdmin() {
-  if (!currentUser?.admin) return;
-
-  const query = ($('#userSearch')?.value || '').toLowerCase();
-  const filteredUsers = users.filter(user =>
-    (user.name + ' ' + user.email).toLowerCase().includes(query)
-  );
-
-  $('#userRows').innerHTML = filteredUsers.map(user => `
-    <tr>
-      <td>${safe(user.name)}</td>
-      <td>${safe(user.email)}</td>
-      <td>${safe(user.role)}</td>
-      <td>${safe(user.joined)}</td>
-      <td><span class="pill ${user.status === 'Hoạt động' ? '' : 'pending'}">${safe(user.status)}</span></td>
-      <td>
-        ${user.email === 'admin@wearai.demo'
-          ? '—'
-          : `<button class="btn light" data-toggle-user="${safe(user.email)}">
-            ${user.status === 'Hoạt động' ? 'Tạm khóa' : 'Mở khóa'}
-          </button>`}
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="6">Không tìm thấy tài khoản.</td></tr>';
-
-  $('#userCount').textContent = users.length;
-  $('#activeCount').textContent = users.filter(user => user.status === 'Hoạt động').length;
-
-  $('#systemRows').innerHTML = [
-    ['Vừa rồi','Mở giao diện quản trị','Hoạt động'],
-    ['Hôm nay','Lưu dữ liệu tủ đồ cục bộ','Hoạt động'],
-    ['Hôm nay','Xác thực tài khoản demo','Mô phỏng']
-  ].map(row => `
-    <tr><td>${safe(row[0])}</td><td>${safe(row[1])}</td><td><span class="pill">${safe(row[2])}</span></td></tr>
-  `).join('');
-}
-
-$('#userRows').addEventListener('click',event => {
-  const button = event.target.closest('[data-toggle-user]');
-  if (!button || !currentUser?.admin) return;
-
-  const user = users.find(item => item.email === button.dataset.toggleUser);
-  if (!user) return;
-
-  user.status = user.status === 'Hoạt động' ? 'Tạm khóa' : 'Hoạt động';
-  saveJSON(STORAGE.users,users);
-  renderAdmin();
-  toast('Đã cập nhật trạng thái tài khoản demo.');
-});
-
-$('#userSearch').addEventListener('input',renderAdmin);
-
-$('#addDemoUser').addEventListener('click',() => {
-  if (!currentUser?.admin) return;
-
-  const name = prompt('Tên người dùng:');
-  if (!name?.trim()) return;
-
-  const email = prompt('Email người dùng:')?.trim().toLowerCase();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    toast('Email chưa hợp lệ.');
-    return;
-  }
-
-  if (users.some(user => user.email === email) || demoCredentials[email]) {
-    toast('Email đã tồn tại.');
-    return;
-  }
-
-  users.push({
-    name:name.trim(),
-    email,
-    role:'Người dùng',
-    joined:today,
-    status:'Hoạt động'
-  });
-
-  saveJSON(STORAGE.users,users);
-  renderAdmin();
-  toast('Đã thêm tài khoản vào danh sách quản trị.');
-});
-
-/* =====================================================
-   12. QUẢN LÝ NỘI DUNG TRANG CHỦ
-===================================================== */
-const defaultContent = {
-  title:'Ít băn khoăn hơn. Thêm tự tin mỗi ngày.',
-  description:'Quản lý trang phục, xây dựng phong cách và khám phá cách phối đồ cùng WearAI.'
+$('#generate').onclick=()=>{
+ const items=myClothes(),style=$('#style').value,occasion=$('#occasion').value;
+ if(items.length<(Number(db.settings.minItems)||2)){msg('Hãy thêm ít nhất '+db.settings.minItems+' món đồ vào tủ.');return}
+ const chosen=[...items].sort((a,b)=>Number(b.favorite)-Number(a.favorite)).slice(0,Math.min(3,items.length));
+ generated++;
+ $('#outfitPreview').innerHTML=`<h3>✧ ${esc(style)} · ${esc(occasion)}</h3><p>${chosen.map(x=>esc(x.name)).join(' + ')}</p><p class="muted">Gợi ý số ${generated}. Đề xuất dựa trên quy tắc demo.</p><button id="saveOutfit">Lưu bộ phối đồ</button>`;
+ $('#saveOutfit').onclick=()=>{
+ db.outfits.push({id:crypto.randomUUID(),owner:current.email,style,occasion,items:chosen.map(x=>x.name),date:today()});
+ persist();log('Tạo và lưu bộ phối đồ');renderAll();msg('Đã lưu bộ phối đồ');
+ };
+ log('Tạo gợi ý phối đồ');renderOutfits();
 };
-
-function loadContent() {
-  const content = readJSON(STORAGE.content,defaultContent);
-  $('#contentTitle').value = content.title || defaultContent.title;
-  $('#contentDescription').value = content.description || defaultContent.description;
-  $('#heroTitle').textContent = content.title || defaultContent.title;
-  $('#heroDescription').textContent = content.description || defaultContent.description;
+$('#outfitsGrid').onclick=e=>{
+ const b=e.target.closest('[data-outfit-del]');if(!b)return;
+ db.outfits=db.outfits.filter(x=>x.id!==b.dataset.outfitDel);persist();log('Xóa bộ phối đồ');renderAll();
+};
+$('#checkMissing').onclick=()=>{
+ const have=new Set(myClothes().map(x=>x.category));
+ const missing=db.criteria.filter(x=>!have.has(x));
+ $('#missingList').textContent=missing.length?'Bạn có thể bổ sung: '+missing.join(', '):'Tủ đồ đã đáp ứng các tiêu chí hiện tại.';
+ log('Kiểm tra món đồ còn thiếu');
+};
+$('#feedbackForm').onsubmit=e=>{
+ e.preventDefault();const outfit=db.outfits.find(x=>x.id===$('#feedbackOutfit').value);
+ if(!outfit){msg('Hãy tạo và lưu một bộ phối đồ trước.');return}
+ db.feedback.push({id:crypto.randomUUID(),owner:current.email,outfit:outfit.style+' - '+outfit.occasion,rating:Number($('#rating').value),text:$('#feedbackText').value.trim(),status:'Chưa xử lý',date:today()});
+ persist();log('Gửi phản hồi');$('#feedbackText').value='';renderAll();msg('Đã gửi đánh giá');
+};
+function renderFeedback(){
+ const list=db.feedback.filter(x=>x.owner===current.email);
+ $('#feedbackCount').textContent=list.length;
+ $('#myFeedback').innerHTML=list.map(f=>`<div class="card" style="margin:10px 0"><b>${esc(f.outfit)}</b><p>Đánh giá: ${f.rating}/5</p><p>${esc(f.text)}</p><p class="muted">${esc(f.date)} · ${esc(f.status)}</p></div>`).join('')||'<div class="empty">Bạn chưa gửi phản hồi.</div>';
 }
-
-$('#contentForm').addEventListener('submit',event => {
-  event.preventDefault();
-  if (!currentUser?.admin) return;
-
-  const content = {
-    title:$('#contentTitle').value.trim(),
-    description:$('#contentDescription').value.trim()
-  };
-
-  saveJSON(STORAGE.content,content);
-  loadContent();
-  toast('Đã cập nhật nội dung trang chủ.');
-});
-
-/* =====================================================
-   13. RENDER TOÀN BỘ VÀ KHỞI ĐỘNG
-===================================================== */
-function renderAll() {
-  renderClothes();
-  renderProducts();
-  renderAffiliateReport();
-
-  if (currentUser?.admin) renderAdmin();
+function fillProfile(){
+ const u=db.users.find(x=>x.email===current.email),p=u.profile||{};
+ $('#pName').value=p.name||u.name;$('#pEmail').value=u.email;$('#pAge').value=p.age||'';$('#pCity').value=p.city||'';$('#pHeight').value=p.height||'';$('#pFit').value=p.fit||'Thoải mái';$('#pColors').value=p.colors||'';$('#pStyle').value=p.style||'';$('#pNotes').value=p.notes||'';
 }
-
-function init() {
-  // Đảm bảo tài khoản quản trị demo luôn có trong danh sách.
-  if (!users.some(user => user.email === 'admin@wearai.demo')) {
-    users.unshift({
-      name:'Quản trị viên',
-      email:'admin@wearai.demo',
-      role:'Quản trị viên',
-      joined:'2026-08-01',
-      status:'Hoạt động'
-    });
-    saveJSON(STORAGE.users,users);
-  }
-
-  loadContent();
-  renderAll();
+$('#profileForm').onsubmit=e=>{
+ e.preventDefault();const u=db.users.find(x=>x.email===current.email);
+ u.name=$('#pName').value.trim();
+ u.profile={name:u.name,age:$('#pAge').value,city:$('#pCity').value,height:$('#pHeight').value,fit:$('#pFit').value,colors:$('#pColors').value,style:$('#pStyle').value,notes:$('#pNotes').value};
+ $('#sideName').textContent=u.name;persist();log('Cập nhật hồ sơ');msg('Đã lưu hồ sơ');
+};
+function renderUsers(){
+ const q=($('#userSearch')?.value||'').toLowerCase();
+ $('#usersTable').innerHTML=rows(['Tên','Email','Vai trò','Ngày tạo','Trạng thái','Thao tác'],db.users.filter(u=>(u.name+' '+u.email).toLowerCase().includes(q)).map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${u.role==='admin'?'Quản trị viên':'Người dùng'}</td><td>${esc(u.joined)}</td><td>${esc(u.status)}</td><td><button class="light" data-user-status="${esc(u.email)}">${u.status==='Hoạt động'?'Khóa':'Mở khóa'}</button> <button class="light" data-user-role="${esc(u.email)}">Đổi quyền</button></td></tr>`).join(''));
 }
-
+$('#userSearch').oninput=renderUsers;
+$('#addUser').onclick=()=>{
+ if(!allowedAdmin())return;
+ const name=prompt('Tên người dùng:');if(!name?.trim())return;
+ const email=prompt('Email:')?.trim().toLowerCase();if(!email||db.users.some(x=>x.email===email)){msg('Email không hợp lệ hoặc đã tồn tại');return}
+ const password=prompt('Mật khẩu tạm (ít nhất 6 ký tự):');if(!password||password.length<6)return;
+ db.users.push({name:name.trim(),email,password,role:'user',status:'Hoạt động',joined:today()});persist();log('Quản trị thêm tài khoản');renderAll();
+};
+$('#usersTable').onclick=e=>{
+ const b=e.target.closest('button');if(!b||!allowedAdmin())return;
+ const u=db.users.find(x=>x.email===b.dataset.userStatus||x.email===b.dataset.userRole);if(!u)return;
+ if(b.dataset.userStatus){if(u.email===current.email){msg('Không thể tự khóa tài khoản đang dùng');return}u.status=u.status==='Hoạt động'?'Tạm khóa':'Hoạt động'}
+ if(b.dataset.userRole){if(u.email==='admin@wearai.demo'){msg('Không đổi quyền tài khoản demo gốc');return}u.role=u.role==='admin'?'user':'admin'}
+ persist();log('Quản lý tài khoản '+u.email);renderAll();
+};
+function renderAdminWardrobe(){
+ const q=($('#adminClothesSearch')?.value||'').toLowerCase();
+ $('#adminClothesTable').innerHTML=rows(['Người sở hữu','Tên món đồ','Danh mục','Màu sắc','Thao tác'],db.clothes.filter(x=>(x.name+' '+x.owner).toLowerCase().includes(q)).map(x=>`<tr><td>${esc(x.owner)}</td><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td>${esc(x.color)}</td><td><button class="danger" data-admin-del="${x.id}">Xóa</button></td></tr>`).join(''));
+}
+$('#adminClothesSearch').oninput=renderAdminWardrobe;
+$('#adminClothesTable').onclick=e=>{
+ const b=e.target.closest('[data-admin-del]');if(!b||!allowedAdmin())return;
+ if(confirm('Xóa món đồ khỏi dữ liệu demo?')){db.clothes=db.clothes.filter(x=>x.id!==b.dataset.adminDel);persist();log('Quản trị xóa dữ liệu tủ đồ');renderAll()}
+};
+function renderSimpleList(id,arr,delKey){
+ $(id).innerHTML=arr.map(x=>`<div class="card" style="margin:10px 0"><b>${esc(x.name)}</b><p class="muted">${esc(x.desc||'')}</p><button class="danger" data-list-del="${x.id}" data-list="${delKey}">Xóa</button></div>`).join('')||'<div class="empty">Chưa có dữ liệu.</div>';
+}
+$('#trendForm').onsubmit=e=>{
+ e.preventDefault();db.trends.push({id:crypto.randomUUID(),name:$('#trendName').value.trim(),desc:$('#trendDesc').value.trim()});persist();log('Thêm xu hướng');renderAll();e.target.reset();
+};
+$('#ruleForm').onsubmit=e=>{
+ e.preventDefault();db.rules.push({id:crypto.randomUUID(),name:$('#ruleName').value.trim(),desc:$('#ruleDesc').value.trim()});persist();log('Thêm quy tắc phối đồ');renderAll();e.target.reset();
+};
+$('#trendsList').onclick=$('#rulesList').onclick=e=>{
+ const b=e.target.closest('[data-list-del]');if(!b||!allowedAdmin())return;
+ db[b.dataset.list]=db[b.dataset.list].filter(x=>x.id!==b.dataset.listDel);persist();log('Xóa dữ liệu quản trị');renderAll();
+};
+function renderCriteria(){
+ $('#criteriaList').innerHTML=['Áo','Quần','Váy','Giày','Phụ kiện'].map(c=>`<label style="display:flex;gap:9px;margin:12px 0"><input type="checkbox" value="${c}" ${db.criteria.includes(c)?'checked':''} style="width:auto"> ${c}</label>`).join('');
+}
+$('#saveCriteria').onclick=()=>{
+ if(!allowedAdmin())return;
+ db.criteria=$$('#criteriaList input:checked').map(x=>x.value);persist();log('Cập nhật tiêu chí món đồ còn thiếu');msg('Đã lưu tiêu chí');renderAll();
+};
+$('#productForm').onsubmit=e=>{
+ e.preventDefault();if(!allowedAdmin())return;
+ let url;try{url=new URL($('#prodUrl').value);if(url.protocol!=='https:')throw 0}catch{msg('URL phải bắt đầu bằng https://');return}
+ db.products.push({id:crypto.randomUUID(),name:$('#prodName').value.trim(),brand:$('#prodBrand').value.trim(),category:$('#prodCategory').value,price:$('#prodPrice').value,url:url.href});
+ persist();log('Thêm sản phẩm/affiliate');renderAll();e.target.reset();
+};
+function renderProducts(){
+ $('#productsList').innerHTML=rows(['Sản phẩm','Thương hiệu','Danh mục','Giá','Liên kết','Thao tác'],db.products.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.brand)}</td><td>${esc(p.category)}</td><td>${esc(p.price)}</td><td><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">Mở liên kết ↗</a></td><td><button class="danger" data-prod-del="${p.id}">Xóa</button></td></tr>`).join(''));
+}
+$('#productsList').onclick=e=>{
+ const b=e.target.closest('[data-prod-del]');if(!b||!allowedAdmin())return;
+ db.products=db.products.filter(x=>x.id!==b.dataset.prodDel);persist();log('Xóa sản phẩm');renderAll();
+};
+function renderReports(){
+ const f=db.feedback,avg=f.length?f.reduce((s,x)=>s+x.rating,0)/f.length:0;
+ $('#rTotal').textContent=generated;$('#rRating').textContent=avg.toFixed(1);$('#rSaved').textContent=db.outfits.length;$('#rFeedback').textContent=f.length;
+ $('#reportsTable').innerHTML=rows(['Ngày','Người dùng','Bộ phối','Điểm','Phản hồi'],f.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.owner)}</td><td>${esc(x.outfit)}</td><td>${x.rating}/5</td><td>${esc(x.text)}</td></tr>`).join(''));
+}
+function renderModeration(){
+ $('#moderationTable').innerHTML=rows(['Ngày','Người dùng','Bộ phối','Điểm','Nội dung','Trạng thái','Thao tác'],db.feedback.map(f=>`<tr><td>${esc(f.date)}</td><td>${esc(f.owner)}</td><td>${esc(f.outfit)}</td><td>${f.rating}/5</td><td>${esc(f.text)}</td><td>${esc(f.status)}</td><td><button class="light" data-feedback-status="${f.id}">Đổi trạng thái</button> <button class="danger" data-feedback-del="${f.id}">Xóa</button></td></tr>`).join(''));
+}
+$('#moderationTable').onclick=e=>{
+ const b=e.target.closest('button');if(!b||!allowedAdmin())return;
+ if(b.dataset.feedbackStatus){const f=db.feedback.find(x=>x.id===b.dataset.feedbackStatus);if(f)f.status=f.status==='Đã xử lý'?'Chưa xử lý':'Đã xử lý'}
+ if(b.dataset.feedbackDel&&confirm('Xóa phản hồi này?'))db.feedback=db.feedback.filter(x=>x.id!==b.dataset.feedbackDel);
+ persist();log('Quản lý phản hồi');renderAll();
+};
+function renderSettings(){
+ $('#siteName').value=db.settings.siteName;$('#minItems').value=db.settings.minItems;$('#systemNotice').value=db.settings.notice;
+}
+$('#settingsForm').onsubmit=e=>{
+ e.preventDefault();if(!allowedAdmin())return;
+ db.settings={siteName:$('#siteName').value.trim()||'WearAI',minItems:Math.max(1,Number($('#minItems').value)||2),notice:$('#systemNotice').value.trim()};
+ persist();log('Cập nhật cấu hình');msg('Đã lưu cấu hình');
+};
+function renderLogs(){
+ $('#logsTable').innerHTML=rows(['Thời gian','Tài khoản','Hoạt động'],db.logs.map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.user)}</td><td>${esc(x.action)}</td></tr>`).join(''));
+}
+$('#exportLogs').onclick=()=>{
+ if(!allowedAdmin())return;
+ const csv='\uFEFF'+[['Thời gian','Tài khoản','Hoạt động'],...db.logs.map(x=>[x.date,x.user,x.action])].map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='wearai-logs.csv';a.click();URL.revokeObjectURL(a.href);
+};
+function renderPage(p){
+ if(p==='home'){$('#clothesCount').textContent=myClothes().length;$('#favCount').textContent=myClothes().filter(x=>x.favorite).length;$('#outfitCount').textContent=db.outfits.filter(x=>x.owner===current.email).length;$('#feedbackCount').textContent=db.feedback.filter(x=>x.owner===current.email).length}
+ if(p==='wardrobe')renderClothes();
+ if(p==='outfits')renderOutfits();
+ if(p==='feedback')renderFeedback();
+ if(p==='profile')fillProfile();
+ if(p==='users')renderUsers();
+ if(p==='adminWardrobe')renderAdminWardrobe();
+ if(p==='trends')renderSimpleList('#trendsList',db.trends,'trends');
+ if(p==='rules')renderSimpleList('#rulesList',db.rules,'rules');
+ if(p==='criteria')renderCriteria();
+ if(p==='products')renderProducts();
+ if(p==='reports')renderReports();
+ if(p==='moderation')renderModeration();
+ if(p==='settings')renderSettings();
+ if(p==='logs')renderLogs();
+}
+function renderAll(){
+ renderPage('home');renderClothes();renderOutfits();renderFeedback();
+ renderUsers();renderAdminWardrobe();renderSimpleList('#trendsList',db.trends,'trends');
+ renderSimpleList('#rulesList',db.rules,'rules');renderCriteria();renderProducts();
+ renderReports();renderModeration();renderSettings();renderLogs();
+}
+async function weather(lat=21.0278,lon=105.8342,city='Hà Nội'){
+ $('#weatherCity').textContent='Đang tải thời tiết...';$('#weatherText').textContent='Đang kết nối dịch vụ thời tiết';
+ try{
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=auto`;
+  const r=await fetch(url);if(!r.ok)throw Error('weather');const d=await r.json(),w=d.current;
+  const descriptions={0:'Trời quang',1:'Ít mây',2:'Có mây rải rác',3:'Nhiều mây',45:'Sương mù',48:'Sương mù đóng băng',51:'Mưa phùn nhẹ',53:'Mưa phùn',55:'Mưa phùn dày',61:'Mưa nhẹ',63:'Mưa vừa',65:'Mưa lớn',71:'Tuyết nhẹ',80:'Mưa rào nhẹ',81:'Mưa rào',82:'Mưa rào mạnh',95:'Có dông'};
+  $('#weatherCity').textContent=city;
+  $('#weatherTemp').textContent=Math.round(w.temperature_2m)+'°C';
+  $('#weatherText').textContent=(descriptions[w.weather_code]||'Thời tiết thay đổi')+' · Cảm giác như '+Math.round(w.apparent_temperature)+'°C';
+  $('#humidity').textContent=w.relative_humidity_2m+'% · Gió '+w.wind_speed_10m+' km/h';
+  $('#weatherAdvice').textContent=w.precipitation>0?'Nên mang ô và chọn trang phục nhanh khô.':w.temperature_2m<18?'Nên mặc áo khoác hoặc nhiều lớp.':w.temperature_2m>30?'Ưu tiên trang phục thoáng mát, thấm hút mồ hôi.':'Trang phục thoải mái, có thể phối nhiều lớp nhẹ.';
+ }catch{
+  $('#weatherCity').textContent=city;$('#weatherTemp').textContent='--°C';
+  $('#weatherText').textContent='Không tải được thời tiết. Kiểm tra kết nối Internet rồi thử lại.';
+  $('#humidity').textContent='Chưa có dữ liệu';$('#weatherAdvice').textContent='Hãy chọn trang phục theo thời tiết thực tế.';
+ }
+}
+function locateWeather(){
+ if(!navigator.geolocation){weather();return}
+ navigator.geolocation.getCurrentPosition(pos=>weather(pos.coords.latitude,pos.coords.longitude,'Vị trí hiện tại'),()=>weather(),{timeout:7000,maximumAge:600000});
+}
+$('#refreshWeather').onclick=locateWeather;
+function init(){
+ persist();
+ if(!localStorage.getItem(KEY+'_seeded')){localStorage.setItem(KEY+'_seeded','1')}
+}
 init();
 </script>
 </body>
