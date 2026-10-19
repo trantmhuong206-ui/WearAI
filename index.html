@@ -381,7 +381,7 @@ $$('[data-go]').forEach(b=>b.onclick=()=>goPage(b.dataset.go));
       src="${safe(c.photo||clothingPhotos[c.category]||clothingPhotos['Áo'])}"
       alt="${safe(c.name)}"
       loading="lazy"
-      onerror="this.src='${clothingPhotos['Áo']}'">
+onerror="this.onerror=null;this.src='${clothingPhotos['Áo']}'">
     <div class="item-body">
       <h4>${safe(c.name)}</h4>
       <p>${safe(c.category)} · ${safe(c.color||'Chưa ghi màu')}</p>
